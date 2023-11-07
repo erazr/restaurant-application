@@ -1,18 +1,26 @@
 from fastapi import FastAPI, Request, Form, HTTPException
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from pydantic import BaseModel
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 #from starlette.responses import HTMLResponse
 from starlette.middleware.sessions import SessionMiddleware
 
 app = FastAPI()
-app.add_middleware(SessionMiddleware,
+app.add_middleware(SessionMiddleware, 
                    secret_key="bebra228")
+app.add_middleware(
+	CORSMiddleware, 
+	allow_origins=["http://localhost:5173"], 
+	allow_credentials=True,
+  allow_methods=["*"],
+  allow_headers=["*"],
+)
 
 DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(DATABASE_URL)
